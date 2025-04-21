@@ -17,11 +17,11 @@ const FormGuru = ({ guru, onClose }) => {
 
     try {
       if (guru) {
-        await axios.put(`http://localhost:5000/api/guru/${guru.id}`, data, {
+        await axios.put(`/api/guru/${guru.id}`, data, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post(`http://localhost:5000/api/guru`, data, {
+        await axios.post(`/api/guru`, data, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

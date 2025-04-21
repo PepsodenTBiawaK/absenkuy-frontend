@@ -13,7 +13,7 @@ const LaporanAdmin = () => {
 
   const fetchRekap = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/laporan/rekap', {
+      const res = await axios.get('/api/laporan/rekap', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDataRekap(res.data.absensi); // hasil dari backend

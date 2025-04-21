@@ -26,17 +26,17 @@ const DashboardAdmin = () => {
 
   const fetchData = async () => {
     try {
-      const guruRes = await axios.get('http://localhost:5000/api/guru', {
+      const guruRes = await axios.get('/api/guru', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJumlahGuru(guruRes.data.length);
 
-      const kelasRes = await axios.get('http://localhost:5000/api/kelas', {
+      const kelasRes = await axios.get('/api/kelas', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJumlahKelas(kelasRes.data.length);
 
-      const siswaRes = await axios.get('http://localhost:5000/api/siswa', {
+      const siswaRes = await axios.get('/api/siswa', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJumlahSiswa(siswaRes.data.length);
@@ -47,7 +47,7 @@ const DashboardAdmin = () => {
 
   const fetchChartData = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/laporan/rekap/kelas', {
+      const res = await axios.get('/api/laporan/rekap/kelas', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setChartData(res.data);

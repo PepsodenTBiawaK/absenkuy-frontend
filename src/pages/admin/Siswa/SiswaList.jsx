@@ -15,7 +15,7 @@ const SiswaList = () => {
   const fetchSiswa = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/siswa', {
+      const res = await axios.get('/api/siswa', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSiswa(res.data);
@@ -33,7 +33,7 @@ const SiswaList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Yakin mau hapus siswa ini?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/siswa/${id}`, {
+      await axios.delete(`/api/siswa/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchSiswa();

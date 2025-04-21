@@ -14,7 +14,7 @@ const FormSiswa = ({ siswa, onClose }) => {
   useEffect(() => {
     const fetchKelas = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/kelas', {
+        const res = await axios.get('/api/kelas', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setKelasList(res.data);
@@ -42,11 +42,11 @@ const FormSiswa = ({ siswa, onClose }) => {
 
     try {
       if (siswa) {
-        await axios.put(`http://localhost:5000/api/siswa/${siswa.id}`, data, {
+        await axios.put(`/api/siswa/${siswa.id}`, data, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post(`http://localhost:5000/api/siswa`, data, {
+        await axios.post(`/api/siswa`, data, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

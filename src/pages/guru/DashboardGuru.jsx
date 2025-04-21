@@ -34,7 +34,7 @@ const DashboardGuru = () => {
 
   const fetchKelas = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/kelas/guru', {
+      const res = await axios.get('/api/kelas/guru', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setKelasSaya(res.data);
@@ -45,7 +45,7 @@ const DashboardGuru = () => {
 
   const fetchRekap = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/laporan/rekap/guru', {
+      const res = await axios.get('/api/laporan/rekap/guru', {
         headers: { Authorization: `Bearer ${token}` }
       });
 

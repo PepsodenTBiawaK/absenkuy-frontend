@@ -18,7 +18,7 @@ const DashboardSiswa = () => {
 
   const fetchAbsensiSaya = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/laporan/saya', {
+      const res = await axios.get('/api/laporan/saya', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAbsensi(res.data.absensi);

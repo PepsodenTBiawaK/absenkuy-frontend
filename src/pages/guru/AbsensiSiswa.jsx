@@ -24,7 +24,7 @@ const AbsensiSiswa = () => {
 
   const fetchKelasGuru = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/kelas/guru", {
+      const res = await axios.get("/api/kelas/guru", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setKelasList(res.data);
@@ -35,7 +35,7 @@ const AbsensiSiswa = () => {
 
   const fetchSiswaByKelas = async (kelasId) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/siswa/kelas?kelas_id=${kelasId}`, {
+      const res = await axios.get(`/api/siswa/kelas?kelas_id=${kelasId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSiswaList(res.data);
@@ -51,7 +51,7 @@ const AbsensiSiswa = () => {
 
   const fetchRiwayatByKelas = async (kelasId) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/laporan/guru/kelas/${kelasId}`, {
+      const res = await axios.get(`/api/laporan/guru/kelas/${kelasId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setRiwayatAbsensi(res.data.absensi || []);
@@ -93,7 +93,7 @@ const AbsensiSiswa = () => {
         absensi: absensiData,
       };
 
-      await axios.post("http://localhost:5000/api/absensi", payload, {
+      await axios.post("/api/absensi", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

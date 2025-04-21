@@ -10,7 +10,7 @@ const FormKelas = ({ kelas, onClose }) => {
   useEffect(() => {
     const fetchGuru = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/guru', {
+        const res = await axios.get('/api/guru', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setGuruList(res.data);
@@ -29,11 +29,11 @@ const FormKelas = ({ kelas, onClose }) => {
 
     try {
       if (kelas) {
-        await axios.put(`http://localhost:5000/api/kelas/${kelas.id}`, data, {
+        await axios.put(`/api/kelas/${kelas.id}`, data, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post(`http://localhost:5000/api/kelas`, data, {
+        await axios.post(`/api/kelas`, data, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

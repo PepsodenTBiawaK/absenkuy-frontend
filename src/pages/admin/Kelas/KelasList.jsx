@@ -15,7 +15,7 @@ const KelasList = () => {
   const fetchKelas = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/kelas', {
+      const res = await axios.get('/api/kelas', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setKelas(res.data);
@@ -33,7 +33,7 @@ const KelasList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Yakin mau hapus kelas ini?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/kelas/${id}`, {
+      await axios.delete(`/api/kelas/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchKelas();

@@ -15,7 +15,7 @@ const GuruList = () => {
   const fetchGuru = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/guru', {
+      const res = await axios.get('/api/guru', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setGuru(res.data);
@@ -33,7 +33,7 @@ const GuruList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Yakin mau hapus guru ini?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/guru/${id}`, {
+      await axios.delete(`/api/guru/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchGuru();
