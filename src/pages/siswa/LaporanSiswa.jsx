@@ -1,11 +1,16 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import Sidebar from '../../components/Sidebar';
-import Navbar from '../../components/Navbar';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Sidebar from "../../components/Sidebar";
+import Navbar from "../../components/Navbar";
 
 const LaporanSiswa = () => {
   const [absensi, setAbsensi] = useState([]);
-  const token = localStorage.getItem('token');
+  const [filterStatus, setFilterStatus] = useState("");
+  const [filterTanggal, setFilterTanggal] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     fetchLaporanSaya();
@@ -13,8 +18,8 @@ const LaporanSiswa = () => {
 
   const fetchLaporanSaya = async () => {
     try {
-      const res = await axios.get('/api/laporan/saya', {
-        headers: { Authorization: `Bearer ${token}` }
+      const res = await axios.get("/api/laporan/saya", {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setAbsensi(res.data.absensi);
     } catch (err) {
@@ -22,15 +27,18 @@ const LaporanSiswa = () => {
     }
   };
 
-  const formatTanggal = (tanggal) => {
-    return new Intl.DateTimeFormat("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    }).format(new Date(tanggal));
+  const formatDateTime = (iso) => {
+    const d = new Date(iso);
+    const dd = String(d.getDate()).padStart(2, "0");
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const yy = String(d.getFullYear()).slice(-2);
+    const hh = String(d.getHours()).padStart(2, "0");
+    const min = String(d.getMinutes()).padStart(2, "0");
+    return `${dd}-${mm}-${yy}, ${hh}.${min}`;
   };
+  
 
-  const getStatusBadge = (status) => {
+  const statusBadge = (status) => {
     const base = "px-2 py-1 rounded text-xs font-medium capitalize";
     switch (status) {
       case "hadir":
@@ -46,37 +54,76 @@ const LaporanSiswa = () => {
     }
   };
 
+  const filtered = absensi.filter(item => {
+    const itemDate = new Date(item.tanggal);
+    const afterStart = !startDate || new Date(startDate) <= itemDate;
+    const beforeEnd = !endDate || new Date(endDate) >= itemDate;
+  
+    return (
+      afterStart &&
+      beforeEnd &&
+      (!filterStatus || item.status === filterStatus)
+    );
+  });
+  
+
   return (
     <div className="flex">
       <Sidebar role="siswa" />
       <div className="flex-1 ml-64 bg-gray-100 min-h-screen">
         <Navbar title="Laporan Absensi Saya" />
         <div className="p-8">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">📑 Riwayat Absensi</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">📑 Laporan Absensi Saya</h2>
 
-          <div className="overflow-x-auto bg-white p-6 rounded-xl shadow">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-100 text-gray-700">
+          {/* FILTER */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Filter Status</label>
+              <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="w-full px-3 py-2 border rounded-md text-sm focus:ring focus:ring-blue-300">
+                <option value="">Semua Status</option>
+                {["hadir", "izin", "sakit", "alpa"].map((s) => (
+                  <option key={s} value={s}>
+                    {s.charAt(0).toUpperCase() + s.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Dari Tanggal</label>
+                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full px-3 py-2 border rounded-md text-sm focus:ring focus:ring-blue-300" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Sampai Tanggal</label>
+                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full px-3 py-2 border rounded-md text-sm focus:ring focus:ring-blue-300" />
+              </div>
+            </div>
+          </div>
+
+          {/* TABLE */}
+          <div className="overflow-x-auto bg-white rounded shadow">
+            <table className="min-w-full text-left">
+              <thead className="bg-gray-200 text-gray-700 text-sm">
                 <tr>
-                  <th className="text-left px-4 py-2">Tanggal</th>
-                  <th className="text-left px-4 py-2">Kelas</th>
-                  <th className="text-left px-4 py-2">Status</th>
+                  <th className="px-4 py-3 font-semibold">Waktu Dibuat</th>
+                  <th className="px-4 py-3 font-semibold">Kelas</th>
+                  <th className="px-4 py-3 font-semibold">Status</th>
                 </tr>
               </thead>
               <tbody>
-                {absensi.length === 0 ? (
+                {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan="3" className="text-center py-4 text-gray-500">
+                    <td colSpan="3" className="text-center py-6 text-gray-500">
                       Tidak ada data absensi.
                     </td>
                   </tr>
                 ) : (
-                  absensi.map((item, index) => (
-                    <tr key={index} className="border-b text-gray-700">
-                      <td className="px-4 py-2">{formatTanggal(item.tanggal)}</td>
+                  filtered.map((item, index) => (
+                    <tr key={index} className="border-t hover:bg-gray-50 text-sm text-gray-800">
+                      <td className="px-4 py-2">{formatDateTime(item.createdAt)}</td>
                       <td className="px-4 py-2">{item.kelas?.nama_kelas}</td>
                       <td className="px-4 py-2">
-                        <span className={getStatusBadge(item.status)}>{item.status}</span>
+                        <span className={statusBadge(item.status)}>{item.status}</span>
                       </td>
                     </tr>
                   ))
